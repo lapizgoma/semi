@@ -1,36 +1,20 @@
 package com.example.tp_seminarios
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class Login : AppCompatActivity() {
-
-    lateinit var tvOlvidoPassword: TextView
-
+class ForgePassword : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_forge_password)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-        tvOlvidoPassword = findViewById(R.id.olvidoPassword);
-        handlerOlvidoPassword(tvOlvidoPassword)
-
-    }
-
-    private fun handlerOlvidoPassword(tvOlvidoPassword: TextView){
-        tvOlvidoPassword.setOnClickListener{
-            val intent = Intent(this, ForgePassword::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 }
