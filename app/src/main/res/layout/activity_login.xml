@@ -26,7 +26,7 @@
     <LinearLayout
         android:id="@+id/contenedor"
         android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/border"
         android:padding="20dp"
@@ -50,11 +50,13 @@
                 android:layout_marginBottom="5dp"/>
 
             <EditText
+                android:id="@+id/inputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:padding="8dp"
-                android:backgroundTint="@color/white"/>
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white"/>
 
             <!-- Contraseña -->
             <TextView
@@ -68,13 +70,16 @@
                 android:layout_marginBottom="5dp"/>
 
             <EditText
+                android:id="@+id/inputPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:backgroundTint="@color/white"/>
+                android:backgroundTint="@color/white"
+                android:textColor="@color/white"/>
 
             <CheckBox
+                android:id="@+id/cbRecordarPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recordar usuario"
@@ -97,6 +102,7 @@
 
     <!-- Botón de acción -->
     <Button
+        android:id="@+id/btnIniciarSession"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="Iniciar"
