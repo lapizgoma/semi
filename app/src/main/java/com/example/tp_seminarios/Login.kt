@@ -28,7 +28,7 @@ class Login : AppCompatActivity() {
 
     private fun handlerOlvidoPassword(tvOlvidoPassword: TextView){
         tvOlvidoPassword.setOnClickListener{
-            val intent = Intent(this, ForgePassword::class.java)
+            val intent = Intent(this, ForgetPassword::class.java)
             startActivity(intent)
             finish()
         }
