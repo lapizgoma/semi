@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">tp_seminarios</string>
+    <string name="barra_principal">Poke-API</string>
+    <string name="lista_pokemones">Lista de Pokemones</string>
 </resources>

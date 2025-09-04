@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ListaPokemones"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    >
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/primary_toolbar"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@android:color/white"/>
+    <!-- ACLARACION IMPORTANTE
+     Si no se ve el listado es porque la fuente en el layout item_pokemon
+      esta en blanco, yo lo hice de esta manera porque mi emulador esta en modo oscuro
+      para modificarlo hay que ir al layout y cambiar el color de la fuente
+      att: Kevin
+       -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPokemones"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_pokemon"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
+
+</LinearLayout>
