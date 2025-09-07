@@ -36,5 +36,10 @@ class PokemonAdapter(
         holder.txtNivel.text = "Nivel: ${item.nivel}"
 
         // Aqui se realiza el evento del click para que muestre los detalles del pokemon
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, PokemonDetails::class.java)
+            intent.putExtra("pokemon", item)
+            context.startActivity(intent)
+        }
     }
 }
