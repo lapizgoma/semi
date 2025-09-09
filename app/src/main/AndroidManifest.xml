@@ -27,6 +27,9 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ForgetPassword" />
         <activity android:name=".PokemonDetails" />
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

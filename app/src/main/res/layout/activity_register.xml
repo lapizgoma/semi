@@ -8,7 +8,7 @@
     android:background="@color/material_dynamic_neutral10"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".Login">
+    tools:context=".RegisterActivity">
 
     <!-- Título -->
     <TextView
@@ -17,7 +17,7 @@
         android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif-smallcaps"
         android:gravity="center"
-        android:text="Iniciar sesión"
+        android:text="Registro"
         android:textColor="@color/white"
         android:textSize="30dp"
         android:textStyle="bold" />
@@ -39,10 +39,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Nombre de Usuario -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:gravity="start"
+                android:text="Nombre de Usuario"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/inputUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:inputType="text"
+                android:padding="8dp"
+                android:textColor="@color/white" />
+
             <!-- Email -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:gravity="start"
                 android:text="Email"
@@ -78,41 +98,43 @@
                 android:padding="8dp"
                 android:textColor="@color/white" />
 
-            <CheckBox
-                android:id="@+id/cbRecordarPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:text="Recordar usuario"
-                android:textColor="@color/white" />
-
-            <!-- Link de contraseña olvidada -->
+            <!-- Confirmar Contraseña -->
             <TextView
-                android:id="@+id/olvidoPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="end"
-                android:text="¿Olvidó su contraseña?"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="start"
+                android:text="Confirmar Contraseña"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/inputConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:inputType="textPassword"
+                android:padding="8dp"
+                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Botón de acción -->
-    <Button
-        android:id="@+id/btnIniciarSession"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Iniciar"
-        android:textColor="@color/white" />
-    <!-- Botón Ir al Registro -->
+    <!-- Botón Registrarse -->
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="40dp"
         android:text="Registrarse"
+        android:textColor="@color/white" />
+
+    <!-- Botón Iniciar Sesión -->
+    <Button
+        android:id="@+id/btnIniciarSession"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Iniciar Sesión"
         android:textColor="@color/white" />
 </LinearLayout>
