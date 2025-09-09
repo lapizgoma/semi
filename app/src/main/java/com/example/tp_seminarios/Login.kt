@@ -20,6 +20,7 @@ class Login : AppCompatActivity() {
     private lateinit var etPassword: EditText
     private lateinit var cbCheckPassword: CheckBox
     private lateinit var btnIniciarSession: Button
+    private lateinit var btnRegister: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,8 @@ class Login : AppCompatActivity() {
         cbCheckPassword = findViewById(R.id.cbRecordarPassword)
         handlerOlvidoPassword(tvOlvidoPassword)
         iniciarSession(btnIniciarSession)
-
+        btnRegister = findViewById(R.id.btnRegister)
+        goToRegister(btnRegister)
     }
 
     private fun handlerOlvidoPassword(tvOlvidoPassword: TextView){
@@ -76,6 +78,13 @@ class Login : AppCompatActivity() {
                 }
             }
 
+        }
+    }
+    private fun goToRegister(btnRegsiter: Button) {
+        btnRegsiter.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }
