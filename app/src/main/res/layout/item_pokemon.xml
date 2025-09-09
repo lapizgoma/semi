@@ -10,7 +10,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="0.5"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tvTipo"
@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:layout_weight="0.5"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tvNivel"
@@ -27,5 +27,5 @@
             android:layout_margin="4dp"
             android:layout_weight="0.5"
             android:inputType="number"
-            android:textColor="@color/white"/>
+            android:textColor="@color/black"/>
     </LinearLayout>
