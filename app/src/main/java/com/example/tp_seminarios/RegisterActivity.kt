@@ -6,6 +6,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.tp_seminarios.data.Usuario
+import com.example.tp_seminarios.database.AppDatabase
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -77,6 +79,8 @@ class RegisterActivity : AppCompatActivity() {
 
                 else -> {
                     val intent = Intent(this, Principal::class.java)
+                    val usuario = Usuario(etUserName.text.toString(),etPassword.text.toString(),etEmail.text.toString());
+                    AppDatabase.getDataBase(applicationContext).usuarioDao().insertUsuario(usuario)
                     startActivity(intent)
                     finish()
                 }
