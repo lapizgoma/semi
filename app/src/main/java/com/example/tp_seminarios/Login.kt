@@ -11,6 +11,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.tp_seminarios.data.Usuario
+import com.example.tp_seminarios.database.AppDatabase
 import kotlin.io.path.Path
 
 class Login : AppCompatActivity() {
@@ -73,13 +75,25 @@ class Login : AppCompatActivity() {
                     if(cbCheckPassword.isChecked){
                         Toast.makeText(this,"Usuario recordado", Toast.LENGTH_SHORT).show()
                     }
-                    val intent = Intent(this, Principal::class.java)
-                    startActivity(intent)
+
+                    verificarDatos(etEmail.text.toString(),etPassword.text.toString())
                 }
             }
 
         }
     }
+
+    private fun verificarDatos(email: String,password: String){
+        val user = AppDatabase.getDataBase(applicationContext).usuarioDao().getUsuarioPorEmailYPassword(email,password)
+
+        if(user != null){
+            val intent = Intent(this, Principal::class.java)
+            startActivity(intent)
+        }else{
+            Toast.makeText(this,"El usuario no existe en la base de datos", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     private fun goToRegister(btnRegsiter: Button) {
         btnRegsiter.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
