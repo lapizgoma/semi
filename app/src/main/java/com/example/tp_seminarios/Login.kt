@@ -11,8 +11,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.tp_seminarios.data.Usuario
 import com.example.tp_seminarios.database.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.io.path.Path
 
 class Login : AppCompatActivity() {
@@ -23,6 +28,7 @@ class Login : AppCompatActivity() {
     private lateinit var cbCheckPassword: CheckBox
     private lateinit var btnIniciarSession: Button
     private lateinit var btnRegister: Button
+    private lateinit var tvVerificandoBd: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +44,7 @@ class Login : AppCompatActivity() {
         etEmail = findViewById(R.id.inputEmail)
         etPassword = findViewById(R.id.inputPassword)
         cbCheckPassword = findViewById(R.id.cbRecordarPassword)
+        tvVerificandoBd = findViewById(R.id.tvVerificandoBd)
         handlerOlvidoPassword(tvOlvidoPassword)
         iniciarSession(btnIniciarSession)
         btnRegister = findViewById(R.id.btnRegister)
@@ -63,8 +70,8 @@ class Login : AppCompatActivity() {
                     etEmail.error = "El email no puede estar vacio"
                     etEmail.requestFocus()
                 }
-                !email.contains("@") ->{
-                    etEmail.error = "El formato del email es errado"
+                !email.contains("@") && !email.contains(".com") ->{
+                    etEmail.error = "El formato del email es erroneo"
                     etEmail.requestFocus()
                 }
                 password.isEmpty() ->{
@@ -76,21 +83,10 @@ class Login : AppCompatActivity() {
                         Toast.makeText(this,"Usuario recordado", Toast.LENGTH_SHORT).show()
                     }
 
-                    verificarDatos(etEmail.text.toString(),etPassword.text.toString())
+                    verificandoDatosHilos(etEmail.text.toString(),etPassword.text.toString())
                 }
             }
 
-        }
-    }
-
-    private fun verificarDatos(email: String,password: String){
-        val user = AppDatabase.getDataBase(applicationContext).usuarioDao().getUsuarioPorEmailYPassword(email,password)
-
-        if(user != null){
-            val intent = Intent(this, Principal::class.java)
-            startActivity(intent)
-        }else{
-            Toast.makeText(this,"El usuario no existe en la base de datos", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -100,5 +96,29 @@ class Login : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+    }
+
+    private fun verificandoDatosHilos(email: String, password: String){
+
+        lifecycleScope.launch {
+            try{
+                tvVerificandoBd.setText("Verificando datos del email $email")
+                val user = withContext(Dispatchers.IO){
+                    // Simulamos el delay
+                    delay(5000)
+                    // Obtenemos el usuario desde la bd
+                    AppDatabase.getDataBase(applicationContext).usuarioDao().getUsuarioPorEmailYPassword(email,password)
+                }
+                if(user != null){
+                    val intent = Intent(this@Login, Principal::class.java)
+                    startActivity(intent)
+                    tvVerificandoBd.setText("Verificacion con exito!")
+                }else{
+                    tvVerificandoBd.text = "Usuario o contraseña incorrectos"
+                }
+            }catch (e: Exception){
+                tvVerificandoBd.setText("Hubo un problema interno en la bd -> ${e.message}") // Excepcion personalizada
+                }
+            }
     }
 }
