@@ -4,10 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.lifecycleScope
 import com.example.tp_seminarios.data.Usuario
 import com.example.tp_seminarios.database.AppDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -17,6 +24,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var etConfirmPassword: EditText
+    private lateinit var tvRegistrandoDato: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +35,7 @@ class RegisterActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.inputPassword)
         etConfirmPassword = findViewById(R.id.inputConfirmPassword)
         btnIniciarSession = findViewById(R.id.btnIniciarSession)
+        tvRegistrandoDato = findViewById(R.id.tvRegistrandoDatos)
         iniciarSession(btnIniciarSession)
         btnGoToRegister = findViewById(R.id.btnRegister)
         goToRegister(btnGoToRegister)
@@ -59,7 +68,7 @@ class RegisterActivity : AppCompatActivity() {
                     etEmail.requestFocus()
                 }
 
-                !email.contains("@") -> {
+                !email.contains("@") || !email.contains(".com") -> {
                     etEmail.error = "El formato del email es errado"
                     etEmail.requestFocus()
                 }
@@ -78,13 +87,37 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    val intent = Intent(this, Principal::class.java)
                     val usuario = Usuario(etUserName.text.toString(),etPassword.text.toString(),etEmail.text.toString());
-                    AppDatabase.getDataBase(applicationContext).usuarioDao().insertUsuario(usuario)
-                    startActivity(intent)
-                    finish()
+                    registrandoDatosConHilos(usuario)
                 }
             }
+
         }
+    }
+    private fun registrandoDatosConHilos(usuario: Usuario){
+        lifecycleScope.launch {
+            tvRegistrandoDato.setText("Cargando....")
+            val userDb = withContext(Dispatchers.IO){
+                delay(5000)
+                AppDatabase.getDataBase(applicationContext).usuarioDao().getUsuarioPorEmail(usuario.email)
+            }
+            if(userDb != null){
+                tvRegistrandoDato.setTextColor(AppCompatResources.getColorStateList(this@RegisterActivity,R.color.red))
+                tvRegistrandoDato.setText("El usuario ya existe en el sistema")
+            }else{
+                tvRegistrandoDato.setText("El usuario ha sido creado con exito!!")
+                AppDatabase.getDataBase(applicationContext).usuarioDao().insertUsuario(usuario)
+                delay(5000)
+                goToPrincipal()
+            }
+
+        }
+
+    }
+
+    private fun goToPrincipal(){
+        val intent = Intent(this, Principal::class.java)
+        startActivity(intent)
+        finish()
     }
 }

@@ -14,6 +14,9 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios as u WHERE u.id = :id")
     fun getUsuarioPorId(id: Int): Usuario?
 
+    @Query("SELECT * FROM usuarios as u WHERE u.email = :email")
+    fun getUsuarioPorEmail(email: String): Usuario?
+
     @Query("SELECT * FROM usuarios as u WHERE u.email = :email AND u.contrasenia = :password")
     fun getUsuarioPorEmailYPassword(email: String, password: String): Usuario?
 
