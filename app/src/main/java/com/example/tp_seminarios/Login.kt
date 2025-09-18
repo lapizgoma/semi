@@ -70,7 +70,7 @@ class Login : AppCompatActivity() {
                     etEmail.error = "El email no puede estar vacio"
                     etEmail.requestFocus()
                 }
-                !email.contains("@") && !email.contains(".com") ->{
+                !email.contains("@") || !email.contains(".com") ->{
                     etEmail.error = "El formato del email es erroneo"
                     etEmail.requestFocus()
                 }
@@ -102,7 +102,7 @@ class Login : AppCompatActivity() {
 
         lifecycleScope.launch {
             try{
-                tvVerificandoBd.setText("Verificando datos del email $email")
+                tvVerificandoBd.setText("Verificando datos")
                 val user = withContext(Dispatchers.IO){
                     // Simulamos el delay
                     delay(5000)
