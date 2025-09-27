@@ -1,11 +1,13 @@
 package com.example.tp_seminarios
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,8 +16,16 @@ class Principal : AppCompatActivity() {
 
     lateinit var toolbar : Toolbar
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_principal,menu)
+
+        // NOTA (Juli): por alguna razón,
+        // se necesita hacer esto para que los íconos se muestren si los Items están dentro del menú.
+        if (menu is MenuBuilder) {
+            menu.setOptionalIconsVisible(true)
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
