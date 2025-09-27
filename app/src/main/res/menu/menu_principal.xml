@@ -5,10 +5,12 @@
     <item
         android:id="@+id/lista_pokemones"
         android:title="Lista de pokemones"
+        android:icon="@drawable/ic_lista_24"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/cerrar_session"
         android:title="Cerrar sesion"
+        android:icon="@drawable/ic_logout_24"
         app:showAsAction="never"/>
 </menu>
