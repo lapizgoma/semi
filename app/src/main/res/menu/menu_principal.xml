@@ -4,13 +4,13 @@
     android:fitsSystemWindows="true">
     <item
         android:id="@+id/lista_pokemones"
-        android:title="Lista de pokemones"
+        android:title="@string/lista_pokemones"
         android:icon="@drawable/ic_lista_24"
         app:showAsAction="never"/>
 
     <item
         android:id="@+id/cerrar_session"
-        android:title="Cerrar sesion"
+        android:title="@string/cerrar_sesion"
         android:icon="@drawable/ic_logout_24"
         app:showAsAction="never"/>
 </menu>
