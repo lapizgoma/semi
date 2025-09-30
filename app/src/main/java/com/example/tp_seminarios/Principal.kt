@@ -38,6 +38,9 @@ class Principal : AppCompatActivity() {
                 true
             }
             R.id.cerrar_session -> {
+                val prefenrecias = getSharedPreferences(resources.getString(R.string.sp_credenciales),MODE_PRIVATE)
+                prefenrecias.edit().putString(resources.getString(R.string.usuario),"").apply()
+                prefenrecias.edit().putString(resources.getString(R.string.password),"").apply()
                 intent = Intent(this, Login::class.java)
                 startActivity(intent)
                 finish()

@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -46,9 +45,18 @@ class Login : AppCompatActivity() {
         cbCheckPassword = findViewById(R.id.cbRecordarPassword)
         tvVerificandoBd = findViewById(R.id.tvVerificandoBd)
         handlerOlvidoPassword(tvOlvidoPassword)
-        iniciarSession(btnIniciarSession)
         btnRegister = findViewById(R.id.btnRegister)
         goToRegister(btnRegister)
+
+        btnIniciarSession.setOnClickListener{iniciarSession(etEmail.text.toString().trim(),etPassword.text.toString().trim())}
+
+        val preferencias = getSharedPreferences(resources.getString(R.string.sp_credenciales),MODE_PRIVATE)
+        val emailGuardado = preferencias.getString(resources.getString(R.string.usuario), "")
+        val passwordGuardada = preferencias.getString(resources.getString(R.string.password), "")
+
+        if(emailGuardado?.isNotEmpty() ?: false && passwordGuardada?.isNotEmpty() ?: false){
+            iniciarSession(emailGuardado, passwordGuardada)
+        }
     }
 
     private fun handlerOlvidoPassword(tvOlvidoPassword: TextView){
@@ -59,12 +67,7 @@ class Login : AppCompatActivity() {
         }
     }
 
-    private fun iniciarSession(btnIniciarSession: Button){
-
-        btnIniciarSession.setOnClickListener {
-            val email = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
-
+    private fun iniciarSession(email: String, password: String){
             when{
                 email.isEmpty() ->{
                     etEmail.error = "El email no puede estar vacio"
@@ -79,15 +82,9 @@ class Login : AppCompatActivity() {
                     etPassword.requestFocus()
                 }
                 else ->{
-                    if(cbCheckPassword.isChecked){
-                        Toast.makeText(this,"Usuario recordado", Toast.LENGTH_SHORT).show()
-                    }
-
-                    verificandoDatosHilos(etEmail.text.toString(),etPassword.text.toString())
+                    verificandoDatosHilos(email,password)
                 }
             }
-
-        }
     }
 
     private fun goToRegister(btnRegsiter: Button) {
@@ -115,6 +112,11 @@ class Login : AppCompatActivity() {
                     tvVerificandoBd.setText("Verificacion con exito!")
                 }else{
                     tvVerificandoBd.text = "Usuario o contraseña incorrectos"
+                }
+                if(cbCheckPassword.isChecked){
+                    var prefenrecias = getSharedPreferences(resources.getString(R.string.sp_credenciales),MODE_PRIVATE)
+                    prefenrecias.edit().putString(resources.getString(R.string.usuario),user?.email).apply()
+                    prefenrecias.edit().putString(resources.getString(R.string.password),password).apply()
                 }
             }catch (e: Exception){
                 tvVerificandoBd.setText("Hubo un problema interno en la bd -> ${e.message}") // Excepcion personalizada
