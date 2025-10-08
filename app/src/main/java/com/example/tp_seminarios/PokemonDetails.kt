@@ -2,6 +2,7 @@ package com.example.tp_seminarios
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -25,7 +26,6 @@ class PokemonDetails : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,20 +51,39 @@ class PokemonDetails : AppCompatActivity() {
         val txtVelocidad: TextView = findViewById(R.id.txtVelocidad)
         val txtDescripcion: TextView = findViewById(R.id.txtDescripcion)
 
-        // tipos
-        var imageViews = listOf(tipo1_imgView, tipo2_imgView, tipo3_imgView)
-        var typesList = splitPokemonTypes(pokemon.tipo)
+        // DEBUG: Ver qué tipos tenemos
+        println("DEBUG Details - Pokémon: ${pokemon.nombre}, Tipos: ${pokemon.tipo}")
 
-        for ((index, tipo) in typesList.withIndex ())
-        {
-            if (index < imageViews.size && tipo != null)
-            {
-                imageViews[index].setImageResource (
-                    typeToResource (matchPokemonType (tipo))
-                )
+        var imageViews = listOf(tipo1_imgView, tipo2_imgView, tipo3_imgView)
+
+        imageViews.forEach { it.visibility = View.GONE }
+
+        // Mostrar solo los tipos que existen en la lista
+        for ((index, tipo) in pokemon.tipo.withIndex()) {
+            if (index < imageViews.size) {
+                try {
+                    // Verificar si el tipo está en español o inglés
+                    val spanishTypes = listOf("fuego", "agua", "planta", "electrico", "hielo",
+                        "lucha", "veneno", "tierra", "volador", "psiquico", "bicho",
+                        "roca", "fantasma", "dragon", "siniestro", "acero", "hada", "normal")
+
+                    val englishType = if (tipo.lowercase() in spanishTypes) {
+                        // Si está en español, convertir a inglés
+                        matchPokemonType(tipo)
+                    } else {
+                        // Si ya está en inglés, usar directamente
+                        tipo.lowercase()
+                    }
+
+                    imageViews[index].setImageResource(typeToResource(englishType))
+                    imageViews[index].visibility = View.VISIBLE
+                } catch (e: Exception) {
+                    imageViews[index].visibility = View.GONE
+                }
             }
         }
 
+        // Resto de los datos
         txtNombre.text = pokemon.nombre
         txtNivel.text = "Nivel: ${pokemon.nivel}"
         txtHp.text = "HP: ${pokemon.hp}"
@@ -73,8 +92,4 @@ class PokemonDetails : AppCompatActivity() {
         txtVelocidad.text = "Velocidad: ${pokemon.velocidad}"
         txtDescripcion.text = pokemon.descripcion
     }
-
-
-
-
 }
