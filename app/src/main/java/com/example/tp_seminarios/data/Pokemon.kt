@@ -7,7 +7,7 @@ import java.text.Normalizer
 // Hacemos que sea Serializable para que luego lo podamos usar con el Intent en casos futuros
 data class Pokemon(
     val nombre: String,
-    val tipo: String,
+    val tipo: List<String>,
     val nivel: Int,
     val hp: Int,
     val ataque: Int,
@@ -16,9 +16,7 @@ data class Pokemon(
     val descripcion: String
 ) : Serializable
 
-// Solo si la API nos devuelve en español.
 fun matchPokemonType(spanishType: String): String {
-    // las tildes no son necesarias porque el normalizador las elimina.
     val typeMap = mapOf(
         "fuego" to "fire",
         "agua" to "water",

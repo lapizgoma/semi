@@ -5,22 +5,91 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListaPokemones"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="?android:attr/windowBackground"
+    tools:context=".ListaPokemones">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/primary_toolbar"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@android:color/white" />
-
-    <!-- RecyclerView para los Pokémon -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvPokemones"
+    <!-- AppBar con Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:listitem="@layout/item_pokemon"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:title="Lista de Pokémones" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenedor principal -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- RecyclerView para la lista de Pokémon -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvPokemones"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_pokemon" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <!-- Controles de paginación -->
+    <LinearLayout
+        android:id="@+id/paginationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="12dp"
+        android:background="?attr/colorSurfaceVariant"
+        android:elevation="2dp">
+
+        <Button
+            android:id="@+id/btnAnterior"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Anterior"
+            android:enabled="false"
+            style="?attr/materialButtonOutlinedStyle"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:id="@+id/txtPagina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Página 1"
+            android:layout_marginHorizontal="16dp"
+            android:textSize="16sp"
+            android:textColor="?android:attr/textColorPrimary"
+            android:fontFamily="sans-serif-medium" />
+
+        <Button
+            android:id="@+id/btnSiguiente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Siguiente"
+            style="?attr/materialButtonOutlinedStyle"
+            android:textAllCaps="false" />
+    </LinearLayout>
 
 </LinearLayout>
