@@ -19,3 +19,10 @@
 - Incorporar el funcionamiento lógico del Login - Kevin Vittor
 - Incorporar el funcionamiento lógico del Registro de personas - Kevin Vittor
 ---
+## Funcionalidades realizadas de cada uno entrega 3/3.
+- Agregar llamado a API Rest elegida. - Kevin Vittor
+- Realizar el llamado en un hilo de ejecución distinto
+- Incorporar el uso de Fragmentos en alguna de las pantallas.
+- Generar una notificación cuando se activa la opción de Recordar Usuario.
+---
+
