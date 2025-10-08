@@ -12,10 +12,10 @@
 - Datos completos de un elemento - Julián Ignacio Valiño.
 ---
 ## Funcionalidades realizadas de cada uno entrega 2/3.
-- Agregar Menú y Barra Superior
-- Utilizar iconos con imágenes nativas de Android
+- Agregar Menú y Barra Superior - Francisco Patejim
+- Utilizar iconos con imágenes nativas de Android - Julian Valiño
 - Incorporar el manejo de Base de Datos local para almacenar los usuarios registrados. - Kevin Vittor
-- Incorporar funcionamiento de “Recordar Usuario” con Shared Preferences.
+- Incorporar funcionamiento de “Recordar Usuario” con Shared Preferences. - Francisco Patejim
 - Incorporar el funcionamiento lógico del Login - Kevin Vittor
 - Incorporar el funcionamiento lógico del Registro de personas - Kevin Vittor
 ---
