@@ -1,7 +1,10 @@
 package com.example.tp_seminarios
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,9 +41,7 @@ class Principal : AppCompatActivity() {
                 true
             }
             R.id.cerrar_session -> {
-                val prefenrecias = getSharedPreferences(resources.getString(R.string.sp_credenciales),MODE_PRIVATE)
-                prefenrecias.edit().putString(resources.getString(R.string.usuario),"").apply()
-                prefenrecias.edit().putString(resources.getString(R.string.password),"").apply()
+                Login.forgetSession (applicationContext);
                 intent = Intent(this, Login::class.java)
                 startActivity(intent)
                 finish()
@@ -61,9 +62,34 @@ class Principal : AppCompatActivity() {
             insets
         }
 
+        val dismiss = intent.getBooleanExtra("dismiss", false)
+        if (dismiss) {
+            Login.clearSessionPersistenceNotification(this)
+        }
+
         toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.barra_principal)
 
+        createChannel ("Session", "Session persistence status.")
+    }
+
+
+
+    private fun createChannel(
+        channelName: String,
+        channelDescription: String
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create the NotificationChannel.
+            val name = getString(R.string.session_persistence_notif_name)
+            // val descriptionText = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel(channelName, name, importance)
+            // mChannel.description = descriptionText
+
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
     }
 }
