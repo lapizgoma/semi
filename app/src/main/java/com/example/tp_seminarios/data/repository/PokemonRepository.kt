@@ -1,9 +1,14 @@
 package com.example.tp_seminarios.data.repository
 
 import android.util.Log
+import kotlinx.coroutines.*
 import com.example.tp_seminarios.data.Pokemon
+import com.example.tp_seminarios.data.dto.PokemonDto
+import com.example.tp_seminarios.data.dto.PokemonSpeciesDto
+import com.example.tp_seminarios.data.dto.SpeciesDto
 import com.example.tp_seminarios.data.mapers.PokemonMapper
 import com.example.tp_seminarios.data.network.RetrofitClient
+import retrofit2.Response
 
 class PokemonRepository {
     private val api = RetrofitClient.pokeApiService
@@ -18,9 +23,10 @@ class PokemonRepository {
 
     // Obtener pokemones con paginación
     suspend fun getPokemonsPaginated(
-        limit: Int = 20,
+        limit: Int,
         offset: Int = 0
-    ): Result<PaginatedResult> {
+    ): Result<PaginatedResult>
+    {
         return try {
             Log.d("PAGINATION_DEBUG", "=== INICIANDO PAGINACIÓN ===")
             Log.d("PAGINATION_DEBUG", "Limit: $limit, Offset: $offset")
@@ -40,13 +46,19 @@ class PokemonRepository {
             val nombres = listBody.results.map { it.name }
             Log.d("PAGINATION_DEBUG", "Nombres a procesar: $nombres")
 
-            val pokemones = nombres.mapNotNull { nombre ->
-                getPokemonInterno(nombre).getOrNull().also { pokemon ->
-                    if (pokemon == null) {
-                        Log.w("PAGINATION_DEBUG", "No se pudo obtener: $nombre")
+            // ejecuta cada "getPokemonInterno" en su propia corutina
+            val pokemones = coroutineScope {
+                nombres.map { nombre ->
+                    async(Dispatchers.IO) {
+                        getPokemonInterno(nombre).getOrNull().also { pokemon ->
+                            if (pokemon == null) {
+                                Log.w("PAGINATION_DEBUG", "No se pudo obtener: $nombre")
+                            }
+                        }
                     }
-                }
+                }.awaitAll().filterNotNull()
             }
+
 
             Log.d("PAGINATION_DEBUG", "Pokémones obtenidos: ${pokemones.size}/${nombres.size}")
             Log.d("PAGINATION_DEBUG", "=== PAGINACIÓN COMPLETADA ===\n")
@@ -79,19 +91,28 @@ class PokemonRepository {
     // Metodo interno para obtener pokemon
     private suspend fun getPokemonInterno(nameOrId: String): Result<Pokemon> {
         return try {
+            var pokemonResponse: Response<PokemonDto>? = null
+            var speciesResponse: Response<PokemonSpeciesDto>? = null
+
             Log.d("API_DEBUG", "=== INICIANDO LLAMADA API ===")
             Log.d("API_DEBUG", "Buscando Pokémon: $nameOrId")
+            coroutineScope {
+                Log.d("API_DEBUG", "Llamando a getPokemon($nameOrId)")
+                pokemonResponse = api.getPokemon(nameOrId.lowercase())
+
+                Log.d("API_DEBUG", "Llamando a getPokemonsSpecies(${nameOrId})")
+                speciesResponse = api.getPokemonsSpecies(nameOrId.lowercase())
+            }
+
 
             // Paso 1: Obtener datos básicos del pokemon
-            Log.d("API_DEBUG", "Llamando a getPokemon($nameOrId)")
-            val pokemonResponse = api.getPokemon(nameOrId.lowercase())
 
-            Log.d("API_DEBUG", "Respuesta getPokemon - Código: ${pokemonResponse.code()}")
-            Log.d("API_DEBUG", "Respuesta getPokemon - Exitosa: ${pokemonResponse.isSuccessful}")
+            Log.d("API_DEBUG", "Respuesta getPokemon - Código: ${pokemonResponse?.code()}")
+            Log.d("API_DEBUG", "Respuesta getPokemon - Exitosa: ${pokemonResponse?.isSuccessful}")
 
-            if (!pokemonResponse.isSuccessful || pokemonResponse.body() == null) {
-                Log.e("API_DEBUG", "ERROR en getPokemon: ${pokemonResponse.code()} - ${pokemonResponse.message()}")
-                return Result.failure(Exception("Error al cargar $nameOrId: ${pokemonResponse.code()}"))
+            if (!pokemonResponse?.isSuccessful!! || pokemonResponse.body() == null) {
+                Log.e("API_DEBUG", "ERROR en getPokemon: ${pokemonResponse?.code()} - ${pokemonResponse?.message()}")
+                return Result.failure(Exception("Error al cargar $nameOrId: ${pokemonResponse?.code()}"))
             }
 
             val pokemonDto = pokemonResponse.body()!!
@@ -102,18 +123,15 @@ class PokemonRepository {
             Log.d("API_DEBUG", "  Stats: ${pokemonDto.stats?.size ?: 0}")
 
             // Debug detallado de stats
-            pokemonDto.stats?.forEach { stat ->
-                Log.d("API_DEBUG", "    Stat: ${stat.stat?.name} = ${stat.base_stat}")
+            pokemonDto.stats.forEach { stat ->
+                Log.d("API_DEBUG", "    Stat: ${stat.stat.name} = ${stat.base_stat}")
             }
 
             // Paso 2: Obtener descripción de especies
-            Log.d("API_DEBUG", "Llamando a getPokemonsSpecies(${pokemonDto.id})")
-            val speciesResponse = api.getPokemonsSpecies(pokemonDto.id)
+            Log.d("API_DEBUG", "Respuesta getPokemonsSpecies - Código: ${speciesResponse?.code()}")
+            Log.d("API_DEBUG", "Respuesta getPokemonsSpecies - Exitosa: ${speciesResponse?.isSuccessful}")
 
-            Log.d("API_DEBUG", "Respuesta getPokemonsSpecies - Código: ${speciesResponse.code()}")
-            Log.d("API_DEBUG", "Respuesta getPokemonsSpecies - Exitosa: ${speciesResponse.isSuccessful}")
-
-            val speciesDto = if (speciesResponse.isSuccessful) {
+            val speciesDto = if (speciesResponse?.isSuccessful ?: false) {
                 speciesResponse.body().also {
                     Log.d("API_DEBUG", "SpeciesDto recibido - Descripciones: ${it?.flavor_text_entries?.size ?: 0}")
                 }

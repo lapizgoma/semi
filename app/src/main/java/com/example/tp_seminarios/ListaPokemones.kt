@@ -21,6 +21,10 @@ import com.example.tp_seminarios.data.Pokemon
 import com.example.tp_seminarios.data.repository.PokemonRepository
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
+import kotlinx.coroutines.*
+
 
 class ListaPokemones : AppCompatActivity() {
 
@@ -37,7 +41,7 @@ class ListaPokemones : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private val repository = PokemonRepository()
     private var paginaActual = 1
-    private val pokemonesPorPagina = 20
+    private val pokemonesPorPagina = 10
     private var totalPaginas = 1
     private var cargando = false
 

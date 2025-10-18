@@ -12,7 +12,7 @@ interface PokeApiService {
 
     @GET("pokemon")
     suspend fun getPokemonList(
-        @Query("limit") limit : Int = 20,
+        @Query("limit") limit : Int,
         @Query("offset") offset: Int = 0
     ): Response<PokemonListResponse>
 
@@ -21,9 +21,8 @@ interface PokeApiService {
                 @Path("name") name: String
     ): Response<PokemonDto>
 
-    @GET("pokemon-species/{id}")
+    @GET("pokemon-species/{nameOrId}")
     suspend fun getPokemonsSpecies(
-        @Path("id") id: Int
+        @Path("nameOrId") nameOrId: String
     ): Response<PokemonSpeciesDto>
-
 }
