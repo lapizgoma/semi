@@ -15,11 +15,18 @@
         app:titleTextColor="@android:color/white" />
 
     <TextView
+        android:id="@+id/textViewBienvenida"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Bienvenido a nuestra aplicacion de Pokemon. \nEn la barra superior puede listar los pokemons como usted desee"
+        android:layout_height="wrap_content"
+        android:text="Bienvenido a nuestra aplicacion de Pokemon."
         android:fontFamily="sans-serif-condensed-medium"
         android:textSize="30dp"
         android:gravity="center"/>
+
+    <FrameLayout
+        android:id="@+id/contenedorFragmentos"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>
