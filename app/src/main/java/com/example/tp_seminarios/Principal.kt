@@ -14,6 +14,7 @@ import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.tp_seminarios.ui.fragments.ListaPokemonesFragment
 
 class Principal : AppCompatActivity() {
 
@@ -36,8 +37,11 @@ class Principal : AppCompatActivity() {
         lateinit var intent : Intent
         return when (item.itemId){
             R.id.lista_pokemones -> {
-                intent = Intent(this, ListaPokemones::class.java)
-                startActivity(intent)
+
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.contenedorFragmentos, com.example.tp_seminarios.ui.fragments.ListaPokemonesFragment())
+                    .addToBackStack(null)
+                    .commit()
                 true
             }
             R.id.cerrar_session -> {
@@ -48,7 +52,6 @@ class Principal : AppCompatActivity() {
                 true
             }
             else -> return super.onOptionsItemSelected(item)
-
         }
     }
 
